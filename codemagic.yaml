@@ -10,10 +10,11 @@ workflows:
       cache_paths:
         - $HOME/.gradle/caches
     scripts:
-      - name: Setup project & gradle props
+      - name: Setup project & dependencies
         script: |
           set -e
           
+          # প্রজেক্ট ফোল্ডারে প্রবেশ করা (যদি justcoldshop_app ফোল্ডার থাকে)
           if [ -d "justcoldshop_app" ]; then
             cd justcoldshop_app
           fi
@@ -22,7 +23,7 @@ workflows:
           flutter --version
           flutter config --no-analytics
 
-          # Give Gradle enough memory and AndroidX support
+          # Gradle মেমরি এবং AndroidX কনফিগারেশন
           echo "org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=1G" >> android/gradle.properties
           echo "android.useAndroidX=true" >> android/gradle.properties
           echo "android.enableJetifier=true" >> android/gradle.properties
@@ -36,6 +37,7 @@ workflows:
         script: |
           set -e
           
+          # বিল্ড করার সময়ও নিশ্চিত করা যে আমরা সঠিক ফোল্ডারে আছি
           if [ -d "justcoldshop_app" ]; then
             cd justcoldshop_app
           fi
@@ -44,7 +46,7 @@ workflows:
 
           ls -la build/app/outputs/flutter-apk/
 
-          # Copy APK to repository root (parent directory)
+          # রুট ফোল্ডারে APK কপি করা
           cp build/app/outputs/flutter-apk/app-release.apk ../JustColdShop.apk
           ls -la ../JustColdShop.apk
           echo "=== APK READY ==="
@@ -55,7 +57,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - ashikbd9421@gmail.com
+          - ashikmolla9721@gmail.com
         notify:
           success: true
           failure: true
